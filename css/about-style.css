@@ -1,0 +1,113 @@
+/* --- ABOUT PAGE SPECIFIC STYLES --- */
+
+/* Hero Section */
+.about-hero {
+    text-align: center;
+    padding: 100px 10% 60px 10%;
+    background-color: #fff0f0;
+    border-bottom: 1px solid #ffebeb;
+}
+
+.about-hero h1 {
+    font-size: 2.8rem;
+    font-weight: 800;
+    margin-bottom: 15px;
+    color: #2d3436;
+}
+
+.about-hero p {
+    font-size: 1.1rem;
+    color: #636e72;
+    max-width: 700px;
+    margin: 0 auto;
+    line-height: 1.6;
+}
+
+/* Team Grid Section */
+.team-section {
+    padding: 80px 10%;
+    flex: 1; /* Para itulak ang footer pababa */
+}
+
+.team-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+}
+
+.member-card {
+    background: white;
+    padding: 45px 30px;
+    border-radius: 25px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+    text-align: center;
+    transition: 0.4s ease;
+    border: 2px solid transparent;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.member-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(255, 107, 107, 0.1);
+}
+
+/* Special Style for Mayora */
+.member-card.highlight {
+    background: #fffafa;
+    border-color: #ff6b6b;
+}
+
+.member-icon {
+    font-size: 3.5rem;
+    color: #ff6b6b;
+    margin-bottom: 25px;
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Golden Crown for Mayora */
+.member-card.highlight .member-icon {
+    color: #f1c40f;
+}
+
+.member-card h3 {
+    font-size: 1.5rem;
+    font-weight: 800;
+    margin-bottom: 10px;
+    color: #2d3436;
+}
+
+.role {
+    display: inline-block;
+    padding: 6px 18px;
+    background-color: #ffe0e0;
+    color: #ff6b6b;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+}
+
+/* Gold role for Mayora */
+.member-card.highlight .role {
+    background-color: #fef9e7;
+    color: #f39c12;
+}
+
+.desc {
+    color: #636e72;
+    font-size: 0.95rem;
+    line-height: 1.7;
+}
+
+/* Responsive adjust */
+@media (max-width: 600px) {
+    .about-hero h1 {
+        font-size: 2.2rem;
+    }
+}

@@ -1,0 +1,688 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Anong Ulam? | Generator</title>
+    <!-- 1. Shared Styles (Nav & Footer) -->
+    <link rel="stylesheet" href="../css/shared-style.css" />
+    <link rel="stylesheet" href="../css/generator-style.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+  </head>
+  <body>
+    <!-- NAVBAR (Shared HTML Structure) - generator link is active -->
+    <nav class="navbar">
+      <div class="logo">Anong<span>Ulam</span></div>
+      <ul class="nav-links">
+        <li><a href="../index.html">Home</a></li>
+        <li><a href="generator.html" class="active">Generator</a></li>
+        <li><a href="about.html">About Us</a></li>
+      </ul>
+    </nav>
+
+    <div class="generator-container">
+      <h1>Anong trip mong kainin?</h1>
+      <div class="category-selection">
+        <button class="cat-btn active" onclick="setCategory('All', this)">
+          Kahit Ano
+        </button>
+        <button class="cat-btn" onclick="setCategory('Chicken', this)">
+          Manok
+        </button>
+        <button class="cat-btn" onclick="setCategory('Pork', this)">
+          Baboy
+        </button>
+        <button class="cat-btn" onclick="setCategory('Fish', this)">
+          Isda
+        </button>
+        <button class="cat-btn" onclick="setCategory('Vegetables', this)">
+          Gulay
+        </button>
+        <!-- Soup category removed -->
+      </div>
+
+      <div class="display-box">
+        <div
+          id="ulam-image"
+          class="result-img"
+          style="background-image: url(&quot;../images/background.jpg&quot;)"
+        ></div>
+        <h2 id="ulam-name">Pili ka muna sa taas!</h2>
+      </div>
+
+      <button class="btn-generate" onclick="generateUlam()">
+        I-generate na 'yan!
+      </button>
+    </div>
+
+    <!-- Recipe Modal -->
+    <div id="recipe-modal" class="modal">
+      <div class="modal-content">
+        <span class="close-btn" onclick="closeModal()">&times;</span>
+        <h2 id="recipe-title">Pangalan ng Ulam</h2>
+        <p class="servings">
+          <i class="fas fa-users"></i> Good for: 5-6 Persons
+        </p>
+        <hr />
+        <div class="recipe-body">
+          <div class="recipe-section">
+            <h3><i class="fas fa-list-check"></i> Ingredients</h3>
+            <ul id="ingredients-list"></ul>
+          </div>
+          <div class="recipe-section">
+            <h3><i class="fas fa-fire-burner"></i> Steps</h3>
+            <ol id="steps-list"></ol>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FOOTER (Shared HTML Structure) -->
+    <footer><p>&copy; 2026 Anong Ulam Group. All rights reserved.</p></footer>
+
+    <!-- JAVASCRIPT LOGIC (Ulam List and Generator) -->
+    <script>
+      let selectedCategory = "All";
+      let shownUlam = [];
+
+      const ulamList = [
+        // CHICKEN
+        {
+          name: "Adobong Manok",
+          type: "Chicken",
+          img: "../images/adobo-manok.jpg",
+          ingredients: ["Manok", "Toyo", "Suka", "Bawang", "Paminta"],
+          steps: [
+            "Igisa ang bawang.",
+            "Ilagay ang manok hanggang mag-brown.",
+            "Ihalo ang toyo at suka.",
+            "Pakuluan hanggang lumambot.",
+          ],
+        },
+        {
+          name: "Chicken Afritada",
+          type: "Chicken",
+          img: "../images/chicken-afritada.jpg",
+          ingredients: [
+            "Manok",
+            "Tomato Sauce",
+            "Patatas",
+            "Carrots",
+            "Bell Pepper",
+          ],
+          steps: [
+            "I-brown ang manok.",
+            "Igisa ang bawang at sibuyas.",
+            "Ihalo ang tomato sauce at tubig.",
+            "Ilagay ang gulay at pakuluan.",
+          ],
+        },
+        {
+          name: "Chicken Curry",
+          type: "Chicken",
+          img: "../images/chicken-curry.jpg",
+          ingredients: [
+            "Manok",
+            "Curry Powder",
+            "Gata",
+            "Patatas",
+            "Siling Haba",
+          ],
+          steps: [
+            "Igisa ang manok at curry powder.",
+            "Ihos ang gata.",
+            "Ilagay ang patatas at carrots.",
+            "Lutuin hanggang lumapot.",
+          ],
+        },
+        {
+          name: "Tinola",
+          type: "Chicken",
+          img: "../images/tinola.jpg",
+          ingredients: [
+            "Manok",
+            "Sariwang Luya",
+            "Sayote o Papaya",
+            "Dahon ng Sili o Malunggay",
+          ],
+          steps: [
+            "Igisa ang luya, bawang at sibuyas.",
+            "Ihalo ang manok hanggang pumuti.",
+            "Lagyan ng tubig at pakuluan.",
+            "Ihalo ang gulay bago ihain.",
+          ],
+        },
+        {
+          name: "Fried Chicken Pinoy Style",
+          type: "Chicken",
+          img: "../images/fried-chicken.jpg",
+          ingredients: [
+            "Manok",
+            "Asin at Paminta",
+            "Calamansi",
+            "Tepung (Breading)",
+          ],
+          steps: [
+            "I-marinate ang manok sa calamansi at asin.",
+            "I-coat sa breading.",
+            "I-deep fry hanggang golden brown.",
+          ],
+        },
+        {
+          name: "Chicken Inasal",
+          type: "Chicken",
+          img: "../images/inasal.jpg",
+          ingredients: ["Manok", "Achuete Oil", "Luya", "Tanglad", "Vuka"],
+          steps: [
+            "I-marinate ang manok sa pampalasa.",
+            "Ihanda ang achuete oil pang-pahid.",
+            "Ihawin habang pinapahiran ng langis.",
+          ],
+        },
+        {
+          name: "Chicken Adobo sa Gata",
+          type: "Chicken",
+          img: "../images/adobo-gata.jpg",
+          ingredients: ["Manok", "Gata", "Toyo", "Suka", "Sili"],
+          steps: [
+            "Lutuin ang adobo sa karaniwang paraan.",
+            "Pag malambot na, ibuhos ang gata.",
+            "Hayaan hanggang mag-mantika.",
+          ],
+        },
+        {
+          name: "Chicken Liver Adobo",
+          type: "Chicken",
+          img: "../images/liver-adobo.jpg",
+          ingredients: ["Atay ng Manok", "Toyo", "Suka", "Maraming Bawang"],
+          steps: [
+            "Igisa ang bawang.",
+            "Ilagay ang atay (wag masyadong haluin).",
+            "Ihalo ang toyo at suka.",
+            "Lutuin nang mabilis.",
+          ],
+        },
+        {
+          name: "Sweet and Sour Chicken",
+          type: "Chicken",
+          img: "../images/sweet-sour-chicken.jpg",
+          ingredients: [
+            "Chicken Nuggets/Strips",
+            "Pineapple Tidbits",
+            "Ketchup",
+            "Asukal",
+          ],
+          steps: [
+            "Iprito ang manok.",
+            "Gawin ang sauce gamit ang ketchup at pineapple juice.",
+            "Ihalo ang lahat hanggang lumapot.",
+          ],
+        },
+        {
+          name: "Garlic Butter Chicken",
+          type: "Chicken",
+          img: "../images/garlic-butter-chicken.jpg",
+          ingredients: ["Manok", "Butter", "Maraming Bawang", "Parsley"],
+          steps: [
+            "I-sear ang manok.",
+            "Ihalo ang butter at tustahin ang bawang.",
+            "I-coat ang manok sa sauce.",
+          ],
+        },
+        {
+          name: "Chicken Sisig",
+          type: "Chicken",
+          img: "../images/chicken-sisig.jpg",
+          ingredients: ["Inihaw na Manok", "Sibuyas", "Sili", "Mayonnaise"],
+          steps: [
+            "Chopin ang inihaw na manok.",
+            "Ihalo ang sibuyas at sili.",
+            "Lagyan ng mayo at pigaan ng calamansi.",
+          ],
+        },
+        {
+          name: "Chicken Caldereta",
+          type: "Chicken",
+          img: "../images/chicken-caldereta.jpg",
+          ingredients: ["Manok", "Liver Spread", "Cheese", "Tomato Sauce"],
+          steps: [
+            "Igisa ang manok.",
+            "Ihalo ang sauce at liver spread.",
+            "Lagyan ng cheese para sa creamy texture.",
+          ],
+        },
+
+        // PORK
+        {
+          name: "Sinigang na Baboy",
+          type: "Pork",
+          img: "../images/Killer-Pork-Sinigang.jpg",
+          ingredients: [
+            "1kg Pork Liempo",
+            "1 pack Sinigang Mix",
+            "Gabi",
+            "Labanos",
+            "Sitaw",
+            "Kangkong",
+            "Siling Haba",
+            "Kamatis at Sibuyas",
+          ],
+          steps: [
+            "Pakuluan ang karne kasama ang kamatis, sibuyas, at gabi hanggang lumambot.",
+            "Kapag malambot na ang karne, ilagay ang labanos at sitaw.",
+            "Ihalo ang sinigang mix base sa asim na gusto mo.",
+            "Ilagay ang siling haba at kangkong. Pakuluan ng 1-2 minuto bago ihain.",
+          ],
+        },
+        {
+          name: "Pork Sisig",
+          type: "Pork",
+          img: "../images/sisig.jpg",
+          ingredients: ["Maskara o Liempo", "Sibuyas", "Sili", "Itlog"],
+          steps: [
+            "Ihawi o i-fry ang pork.",
+            "Chopin nang pino.",
+            "Ihalo ang pampalasa at serve sa sizzling plate.",
+          ],
+        },
+        {
+          name: "Pork Adobo",
+          type: "Pork",
+          img: "../images/pork-adobo.jpg",
+          ingredients: ["Pork Belly", "Toyo", "Suka", "Bawang"],
+          steps: [
+            "Igisa ang bawang at pork.",
+            "Ihalo ang toyo, suka at tubig.",
+            "Simmer hanggang lumabas ang mantika.",
+          ],
+        },
+        {
+          name: "Lechon Kawali",
+          type: "Pork",
+          img: "../images/lechon.jpg",
+          ingredients: ["Liempo", "Asin", "Paminta", "Pampalasa"],
+          steps: [
+            "Pakuluan ang pork hanggang lumambot.",
+            "Patuyuin ang balat.",
+            "I-deep fry hanggang lumutong.",
+          ],
+        },
+        {
+          name: "Pork Menudo",
+          type: "Pork",
+          img: "../images/menudo.jpg",
+          ingredients: ["Pork", "Atay", "Hotdog", "Tomato Sauce", "Raisins"],
+          steps: [
+            "Igisa ang pork at atay.",
+            "Ihalo ang sauce at hotdog.",
+            "Pakuluan hanggang lumambot ang patatas.",
+          ],
+        },
+        {
+          name: "Inihaw na Liempo",
+          type: "Pork",
+          img: "../images/liempo.jpg",
+          ingredients: ["Liempo", "Soy Sauce", "Calamansi", "Garlic"],
+          steps: [
+            "I-marinate ang pork nang 3 oras.",
+            "Ihanda ang baga.",
+            "Ihawin hanggang maluto.",
+          ],
+        },
+        {
+          name: "Pork Steak",
+          type: "Pork",
+          img: "../images/pork-steak.jpg",
+          ingredients: ["Pork Chops", "Maraming Sibuyas", "Toyo", "Calamansi"],
+          steps: [
+            "I-marinate ang pork.",
+            "I-fry ang pork.",
+            "Igisa ang sibuyas at ibuhos ang marinade sauce.",
+          ],
+        },
+        {
+          name: "Pork Giniling",
+          type: "Pork",
+          img: "../images/giniling.jpg",
+          ingredients: ["Ground Pork", "Patatas", "Carrots", "Tomato Sauce"],
+          steps: [
+            "Igisa ang bawang, sibuyas at pork.",
+            "Ihalo ang gulay.",
+            "Lagyan ng tomato sauce at pakuluan.",
+          ],
+        },
+        {
+          name: "Pork Caldereta",
+          type: "Pork",
+          img: "../images/pork-caldereta.jpg",
+          ingredients: [
+            "Pork",
+            "Peanut Butter/Cheese",
+            "Tomato Sauce",
+            "Bell Pepper",
+          ],
+          steps: [
+            "Pakuluan ang pork hanggang lumambot.",
+            "Ihalo ang sauce at peanut butter.",
+            "Lagyan ng cheese.",
+          ],
+        },
+        {
+          name: "Pork Humba",
+          type: "Pork",
+          img: "../images/humba.jpg",
+          ingredients: [
+            "Pork Belly",
+            "Tausi",
+            "Bulaklak ng Saging",
+            "Toyo/Asukal",
+          ],
+          steps: [
+            "Igisa ang pork.",
+            "Ihalo ang tausi at asukal.",
+            "Pakuluan hanggang mag-caramelize ang sauce.",
+          ],
+        },
+        {
+          name: "Crispy Pata",
+          type: "Pork",
+          img: "../images/crispy-pata.jpg",
+          ingredients: ["Pata ng Baboy", "Pampalasa", "Mantika"],
+          steps: [
+            "Pakuluan ang pata hanggang lumambot.",
+            "Patuyuin nang maigi.",
+            "I-deep fry hanggang mag-crack ang balat.",
+          ],
+        },
+
+        // FISH
+        {
+          name: "Fried Tilapia",
+          type: "Fish",
+          img: "../images/tilapia.jpg",
+          ingredients: ["Tilapia", "Asin", "Mantika"],
+          steps: [
+            "Lagyan ng asin ang isda.",
+            "Iprito hanggang mag-golden brown.",
+          ],
+        },
+        {
+          name: "Paksiw na Bangus",
+          type: "Fish",
+          img: "../images/paksiw.jpg",
+          ingredients: ["Bangus", "Suka", "Luya", "Talong", "Ampalaya"],
+          steps: [
+            "Ayusin ang isda at gulay sa kawali.",
+            "Ibuhos ang suka at pampalasa.",
+            "Lutuin sa mahinang apoy.",
+          ],
+        },
+        {
+          name: "Pritong Galunggong",
+          type: "Fish",
+          img: "../images/galunggong.jpg",
+          ingredients: ["Galunggong", "Asin", "Mantika"],
+          steps: [
+            "Linisin ang isda.",
+            "Lagyan ng asin.",
+            "Iprito nang malutong.",
+          ],
+        },
+        {
+          name: "Sarsiyadong Isda",
+          type: "Fish",
+          img: "../images/sarsada.jpg",
+          ingredients: ["Piniritong Isda", "Itlog", "Kamatis", "Sibuyas"],
+          steps: [
+            "Igisa ang kamatis at sibuyas.",
+            "Ihalo ang binating itlog.",
+            "Ilatag ang isda sa sauce.",
+          ],
+        },
+        {
+          name: "Sinigang na Bangus",
+          type: "Fish",
+          img: "../images/sinigang-bangus.jpg",
+          ingredients: ["Bangus", "Sinigang Mix", "Kangkong", "Labanos"],
+          steps: [
+            "Pakuluan ang tubig na may kamatis.",
+            "Ihalo ang isda at sinigang mix.",
+            "Ilagay ang mga gulay.",
+          ],
+        },
+        {
+          name: "Paksiw na Galunggong",
+          type: "Fish",
+          img: "../images/paksiw-gg.jpg",
+          ingredients: ["Galunggong", "Suka", "Luya", "Bawang"],
+          steps: [
+            "I-arrange sa palayok.",
+            "Ibuhos ang suka.",
+            "Lutuin hanggang ma-absorb ang asim.",
+          ],
+        },
+        {
+          name: "Tinapa",
+          type: "Fish",
+          img: "../images/tinapa.jpg",
+          ingredients: ["Tinapa", "Kamatis", "Itlog na Maalat"],
+          steps: [
+            "Iprito o i-steam ang tinapa.",
+            "Isabay sa kanin at itlog na maalat.",
+          ],
+        },
+        {
+          name: "Adobong Pusit",
+          type: "Fish",
+          img: "../images/adobong-pusit.jpg",
+          ingredients: ["Pusit", "Toyo", "Suka", "Tinta ng Pusit"],
+          steps: [
+            "Igisa ang bawang at sibuyas.",
+            "Ilagay ang pusit.",
+            "Ihalo ang toyo at suka. Wag i-overcook.",
+          ],
+        },
+
+        // VEGETABLES
+        {
+          name: "Chop Suey",
+          type: "Vegetables",
+          img: "../images/chopsuey.jpg",
+          ingredients: [
+            "Mixed Veggies",
+            "Oyster Sauce",
+            "Chicken Liver/Shrimp",
+          ],
+          steps: [
+            "Igisa ang karne/hipon.",
+            "Ihalo ang matitigas na gulay.",
+            "Ihalo ang oyster sauce at malalambot na gulay.",
+          ],
+        },
+        {
+          name: "Pinakbet",
+          type: "Vegetables",
+          img: "../images/pinakbet.jpg",
+          ingredients: ["Kalabasa", "Sitaw", "Ampalaya", "Bagoong"],
+          steps: [
+            "Igisa ang baboy sa bagoong.",
+            "Ilagay ang kalabasa at sitaw.",
+            "Ihalo ang ampalaya at talong.",
+          ],
+        },
+        {
+          name: "Ginisang Monggo",
+          type: "Vegetables",
+          img: "../images/monggo.jpg",
+          ingredients: ["Monggo", "Dahon ng Malunggay", "Chicharon", "Tinapa"],
+          steps: [
+            "Pakuluan ang monggo.",
+            "Igisa sa bawang at sibuyas.",
+            "Ihalo ang malunggay at chicharon.",
+          ],
+        },
+        {
+          name: "Tortang Talong",
+          type: "Vegetables",
+          img: "../images/torta.jpg",
+          ingredients: ["Talong", "Itlog", "Asin"],
+          steps: [
+            "Ihawin ang talong at alisin ang balat.",
+            "Batiin ang itlog.",
+            "I-dip ang talong at iprito.",
+          ],
+        },
+        {
+          name: "Adobong Sitaw",
+          type: "Vegetables",
+          img: "../images/adobong-sitaw.jpg",
+          ingredients: ["Sitaw", "Pork Strips", "Toyo", "Suka"],
+          steps: [
+            "Igisa ang pork.",
+            "Ihalo ang sitaw.",
+            "Lagyan ng toyo at suka.",
+          ],
+        },
+        {
+          name: "Ginataang Kalabasa at Sitaw",
+          type: "Vegetables",
+          img: "../images/kalabasa-sitaw.jpg",
+          ingredients: ["Kalabasa", "Sitaw", "Gata", "Hipon o Pork"],
+          steps: [
+            "Igisa ang karne.",
+            "Ilagay ang kalabasa at gata.",
+            "Ihalo ang sitaw pag malambot na.",
+          ],
+        },
+        {
+          name: "Laing",
+          type: "Vegetables",
+          img: "../images/laing.jpg",
+          ingredients: ["Dahon ng Gabi", "Gata", "Sili", "Bagoong"],
+          steps: [
+            "I-simmer ang gata.",
+            "Ilagay ang dahon ng gabi (wag haluin agad).",
+            "Lutuin hanggang mag-mantika.",
+          ],
+        },
+        {
+          name: "Ensaladang Talong",
+          type: "Vegetables",
+          img: "../mages/ensalada-talong.jpg",
+          ingredients: [
+            "Inihaw na Talong",
+            "Kamatis",
+            "Sibuyas",
+            "Bagoong o Suka",
+          ],
+          steps: [
+            "Ihawin at balatan ang talong.",
+            "Chopin ang kamatis at sibuyas.",
+            "I-mix lahat sa bowl.",
+          ],
+        },
+        {
+          name: "Ginataang Langka",
+          type: "Vegetables",
+          img: "../images/langka.jpg",
+          ingredients: ["Langka", "Gata", "Tinapa flakes", "Sili"],
+          steps: [
+            "Pakuluan ang langka sa gata.",
+            "Ihalo ang tinapa flakes.",
+            "Lutuin hanggang lumapot.",
+          ],
+        },
+        {
+          name: "Dinengdeng",
+          type: "Vegetables",
+          img: "../images/diningding.jpg",
+          ingredients: [
+            "Bulaklak ng Kalabasa",
+            "Sitaw",
+            "Talong",
+            "Bagoong Isda",
+          ],
+          steps: [
+            "Pakuluan ang tubig na may bagoong.",
+            "Ilagay ang matitigas na gulay.",
+            "Ihalo ang piniritong isda sa ibabaw.",
+          ],
+        },
+      ];
+
+      function setCategory(category, btn) {
+        selectedCategory = category;
+        shownUlam = [];
+        document
+          .querySelectorAll(".cat-btn")
+          .forEach((b) => b.classList.remove("active"));
+        btn.classList.add("active");
+        document.getElementById("ulam-name").innerText = "Ready na!";
+      }
+
+      function generateUlam() {
+        const displayImg = document.getElementById("ulam-image");
+        const displayName = document.getElementById("ulam-name");
+
+        let filteredList =
+          selectedCategory === "All"
+            ? ulamList
+            : ulamList.filter((item) => item.type === selectedCategory);
+        let remainingUlam = filteredList.filter(
+          (item) => !shownUlam.includes(item.name),
+        );
+
+        if (remainingUlam.length === 0) {
+          shownUlam = [];
+          remainingUlam = filteredList;
+        }
+
+        const randomIndex = Math.floor(Math.random() * remainingUlam.length);
+        const selectedUlam = remainingUlam[randomIndex];
+
+        shownUlam.push(selectedUlam.name);
+
+        displayName.innerText = selectedUlam.name;
+        displayImg.style.backgroundImage = `url('${selectedUlam.img}')`;
+
+        setTimeout(() => {
+          showRecipe(selectedUlam);
+        }, 500);
+      }
+
+      function showRecipe(ulam) {
+        const modal = document.getElementById("recipe-modal");
+        if (modal) {
+          document.getElementById("recipe-title").innerText = ulam.name;
+          const ingList = document.getElementById("ingredients-list");
+          const stepList = document.getElementById("steps-list");
+
+          ingList.innerHTML = ulam.ingredients
+            ? ulam.ingredients.map((i) => `<li>${i}</li>`).join("")
+            : "<li>Ingredients soon...</li>";
+          stepList.innerHTML = ulam.steps
+            ? ulam.steps.map((s) => `<li>${s}</li>`).join("")
+            : "<li>Steps soon...</li>";
+
+          modal.style.display = "flex";
+        }
+      }
+
+      function closeModal() {
+        document.getElementById("recipe-modal").style.display = "none";
+      }
+
+      window.onclick = (e) => {
+        const modal = document.getElementById("recipe-modal");
+        if (e.target == modal) closeModal();
+      };
+    </script>
+  </body>
+</html>

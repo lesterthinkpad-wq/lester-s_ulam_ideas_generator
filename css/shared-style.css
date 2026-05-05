@@ -1,0 +1,95 @@
+/* --- GLOBAL RESET & SHARED STYLES --- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    background-color: #fffafa;
+    color: #333;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column; /* Sinisigurado na laging nasa baba ang footer */
+}
+
+h1, h2, h3 {
+    color: #2d3436;
+}
+
+/* --- GLOBAL NAVBAR (Eksaktong Pantay sa Lahat) --- */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 10%; /* Parehong espasyo sa kaliwa at kanan */
+    background: white;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    position: sticky; /* Nananatili sa itaas habang nag-scroll */
+    top: 0;
+    z-index: 1000;
+}
+
+.logo {
+    font-size: .8rem;
+    font-weight: 800;
+}
+
+.logo span {
+    color: #ff6b6b;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 20px; /* Pantay na distansya ng mga links */
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: #333;
+    font-weight: 600;
+    font-size: .8rem;
+    transition: 0.3s ease;
+}
+
+.nav-links a:hover {
+    color: #ff6b6b;
+}
+
+/* Para malaman kung anong page ang active */
+.nav-links a.active {
+    color: #ff6b6b;
+    border-bottom: 2px solid #ff6b6b;
+    padding-bottom: 5px;
+}
+
+/* --- GLOBAL FOOTER (Laging nasa baba) --- */
+footer {
+    padding: 30px 10%;
+    background: white;
+    text-align: center;
+    border-top: 1px solid #eee;
+    margin-top: auto; /* Importante: Tinutulak ang footer sa pinakababa */
+}
+
+footer p {
+    color: #777;
+    font-size: 0.9rem;
+}
+
+/* --- RESPONSIVE MOBILE ADJUSTMENT (Para sa cellphone) --- */
+@media (max-width: 768px) {
+    .navbar {
+        padding: 15px 5%;
+    }
+    
+    .nav-links {
+        gap: 15px;
+    }
+    
+    .nav-links a {
+        font-size: 0.9rem;
+    }
+}
